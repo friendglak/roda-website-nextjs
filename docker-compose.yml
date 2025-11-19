@@ -1,32 +1,45 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  # API Gateway (Punto de entrada único)
+  gateway:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+
   frontend:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "4000:3000"
+    # No exponemos puerto 3000 al host, solo interno para el gateway
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      # El frontend ahora habla con el backend a través del gateway (browser side)
+      # Ojo: Si es server-side rendering, "gateway" no resuelve localhost del usuario,
+      # pero para simplificar dev, usamos localhost:80/api o http://gateway/api internamente.
+      # Para el cliente (navegador), la API está en /api
+      - NEXT_PUBLIC_API_URL=/api
     depends_on:
       - backend
 
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
+    # No exponemos puerto 8000 al host, solo interno
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/miniroda
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - db
+      - redis
     volumes:
       - ./backend:/app
 
   db:
     image: postgres:15-alpine
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -34,5 +47,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres_data:
+  redis_data:

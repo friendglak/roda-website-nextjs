@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { gsap } from 'gsap'
 
+import Link from 'next/link'
+
 interface NavigationProps {
   isMenuOpen: boolean
   setIsMenuOpen: (open: boolean) => void
@@ -42,9 +44,9 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
     <>
       <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none">
         <nav className="pointer-events-auto glass-panel rounded-full px-6 py-3 md:px-8 md:py-4 flex justify-between items-center w-full max-w-5xl transition-all duration-500">
-          <a href="#" className="font-mono font-black text-xl md:text-2xl tracking-tighter uppercase text-white hover:text-roda-green transition-colors relative z-50">
+          <Link href="/" className="font-mono font-black text-xl md:text-2xl tracking-tighter uppercase text-white hover:text-roda-green transition-colors relative z-50">
             RODA
-          </a>
+          </Link>
 
           <div className="flex items-center gap-6">
             <button
@@ -71,8 +73,17 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
       >
         <ul className="space-y-4 text-center">
           <li className="overflow-hidden">
+            <Link
+              href="/catalog"
+              onClick={toggleMenu}
+              className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
+            >
+              Catálogo
+            </Link>
+          </li>
+          <li className="overflow-hidden">
             <a
-              href="#secciones"
+              href="/#secciones"
               onClick={toggleMenu}
               className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
             >

@@ -1,118 +1,79 @@
-# Roda Website - Next.js + Three.js
+# Mini Roda - Sistema de Financiamiento de Vehículos Eléctricos
 
-Sitio web moderno para Roda, una fintech que financia la movilidad eléctrica en Latinoamérica. Construido con Next.js 15, React, Tailwind CSS, GSAP y React Three Fiber con efecto ASCII.
+Este repositorio contiene la solución para la prueba técnica "Mini Roda", una aplicación full-stack para gestionar el financiamiento de vehículos eléctricos.
 
-## 🚀 Características
+## 🚀 Arquitectura
 
-- **Next.js 15**: Framework React con App Router
-- **TypeScript**: Tipado fuerte para mayor seguridad
-- **Tailwind CSS**: Estilos utilitarios con configuración personalizada
-- **GSAP**: Animaciones fluidas y scroll triggers
-- **React Three Fiber**: Gráficos 3D con efecto ASCII
-- **Efecto ASCII**: Visualización ASCII en tiempo real usando Three.js y postprocessing
-- **Diseño Responsive**: Optimizado para todos los dispositivos
-- **Animaciones**: Loader, scroll animations, hover effects
+La solución sigue una arquitectura de microservicios simplificada, orquestada con Docker Compose:
 
-## 📦 Instalación
+- **Frontend**: Next.js 15 (React) + Tailwind CSS. Encargado de la UI, Catálogo y Simulador.
+- **Backend**: FastAPI (Python). API REST para gestión de clientes, vehículos, créditos y pagos.
+- **Base de Datos**: PostgreSQL 15. Persistencia relacional.
 
-```bash
-npm install
-```
+Ver `ARCHITECTURE.md` para más detalles.
 
-## 🏃 Desarrollo
+## 📋 Requisitos
 
-```bash
-npm run dev
-```
+- Docker y Docker Compose instalados.
 
-El sitio estará disponible en `http://localhost:3000`
+## 🛠️ Ejecución
 
-## 🏗️ Build
+Para iniciar todo el ecosistema:
 
 ```bash
-npm run build
+docker-compose up --build
 ```
 
-## 🚀 Producción
+Esto levantará:
 
-```bash
-npm start
-```
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8000`
+- **Documentación API (Swagger)**: `http://localhost:8000/docs`
+- **Base de Datos**: `localhost:5432`
+
+## 🧪 Funcionalidades Implementadas
+
+1. **Catálogo de Vehículos**:
+   - Vista de lista en `/catalog`.
+   - Datos consumidos desde la API Backend.
+2. **Simulador de Crédito**:
+   - Cálculo en tiempo real de cuotas.
+   - Parámetros configurables (Plazo, Cuota Inicial).
+3. **Solicitud de Crédito**:
+   - Registro de Cliente (Nombre, Email, Teléfono).
+   - Creación de Solicitud de Crédito en Base de Datos.
+4. **API REST Completa**:
+   - `GET /vehicles`: Listar vehículos.
+   - `POST /clients`: Crear clientes.
+   - `POST /credits`: Crear solicitudes.
+   - `POST /payments`: Registrar pagos.
 
 ## 📁 Estructura del Proyecto
 
-```
-roda-website/
-├── app/
-│   ├── layout.tsx          # Layout principal con metadata
-│   ├── page.tsx            # Página principal
-│   └── globals.css         # Estilos globales
-├── components/
-│   ├── ascii-effect.tsx    # Componente del efecto ASCII
-│   ├── ascii-scene.tsx     # Escena Three.js con efecto ASCII
-│   ├── Hero.tsx            # Componente Hero
-│   ├── Navigation.tsx      # Navegación
-│   ├── Loader.tsx          # Loader inicial
-│   ├── PartnersMarquee.tsx # Marquee de partners
-│   ├── HowItWorks.tsx      # Sección "Cómo funciona"
-│   ├── Benefits.tsx        # Sección de beneficios
-│   ├── Stats.tsx           # Estadísticas
-│   ├── Testimonials.tsx    # Testimonios
-│   ├── FAQ.tsx             # Preguntas frecuentes
-│   ├── CTA.tsx             # Call to action
-│   ├── Footer.tsx          # Footer
-│   └── CreditModal.tsx     # Modal de crédito
-├── public/                 # Archivos estáticos
-├── next.config.js          # Configuración de Next.js
-├── tailwind.config.ts      # Configuración de Tailwind
-├── tsconfig.json           # Configuración de TypeScript
-└── package.json            # Dependencias
+```bash
+roda-website-nextjs/
+├── app/                # Frontend Next.js
+│   ├── catalog/        # Página de catálogo
+│   ├── lib/            # Cliente API
+│   └── ...
+├── backend/            # Backend FastAPI
+│   ├── app/
+│   │   ├── main.py     # Endpoints
+│   │   ├── models.py   # Modelos DB
+│   │   └── crud.py     # Lógica DB
+│   └── Dockerfile
+├── components/         # Componentes React
+│   ├── CreditModal.tsx # Modal de simulación
+│   └── ...
+├── docker-compose.yml  # Orquestación
+└── ARCHITECTURE.md     # Documentación técnica
 ```
 
-## 🎨 Personalización
+## 📝 Notas
 
-### Colores de marca
+- El backend inicializa la base de datos automáticamente al arrancar.
+- Si el catálogo aparece vacío, asegúrate de crear algunos vehículos vía API (POST `/vehicles`) o usar los datos mock de fallback en el frontend.
 
-Los colores están definidos en `tailwind.config.ts`:
+---
 
-- `roda-green`: #CFFC00
-- `dark-bg`: #121212
-- `light-text`: #F4F4F0
-- `gray-text`: #A0A0A0
-
-### Efecto ASCII
-
-El efecto ASCII se puede personalizar en `components/ascii-scene.tsx` modificando las propiedades del `postfx`:
-
-- `cellSize`: Tamaño de las celdas ASCII
-- `colorPalette`: Paleta de colores (1=Green, 2=Amber, 3=Cyan, 4=Blue)
-- `noiseIntensity`: Intensidad del ruido
-- `glitchIntensity`: Intensidad del efecto glitch
-- Y muchas más opciones...
-
-## 📚 Tecnologías Utilizadas
-
-- **Next.js** 15+
-- **React** 19+
-- **TypeScript** 5+
-- **Tailwind CSS** 4+
-- **GSAP** 3+
-- **Three.js** 0.181+
-- **React Three Fiber** 9+
-- **@react-three/drei** 10+
-- **@react-three/postprocessing** 3+
-- **postprocessing** 6+
-- **Phosphor Icons** - Iconos
-
-## 🎯 Próximos Pasos
-
-- [ ] Integrar backend para formularios
-- [ ] Agregar más efectos visuales
-- [ ] Optimizar rendimiento
-- [ ] Agregar tests
-- [ ] SEO optimization
-- [ ] Internacionalización (i18n)
-
-## 📝 Licencia
-
-Todos los derechos reservados © 2024 Roda
+Desarrollado por [Tu Nombre] para Roda.
