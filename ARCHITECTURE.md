@@ -80,3 +80,6 @@ Todos los servicios se levantan coordinados en una red interna de Docker.
 
 - **Gateway**: Se añadió para desacoplar la ubicación física de los servicios del cliente. Permite escalar el backend sin cambiar el frontend.
 - **Redis**: Se eligió por su simplicidad y performance para estructuras de datos simples como listas JSON.
+- **Frontend Monolítico vs Microfrontends**: Se optó deliberadamente por una arquitectura modular dentro de un único repositorio Next.js en lugar de Microfrontends.
+  - **Razón**: Para el alcance de este MVP, la complejidad operativa de orquestar múltiples despliegues independientes (Module Federation) supera los beneficios.
+  - **Escalabilidad**: Next.js permite separar responsabilidades vía Server Components y módulos. Si el equipo creciera a múltiples squads independientes, la migración a Microfrontends sería el siguiente paso lógico.
