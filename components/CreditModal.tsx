@@ -14,6 +14,12 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
   const [step, setStep] = useState<'form' | 'success'>('form')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    city: ''
+  })
 
   // Form State
   const [formData, setFormData] = useState({
@@ -59,9 +65,62 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
     }
   }, [currentVehicle, downPayment, months])
 
+  const validateForm = () => {
+    const errors = {
+      name: '',
+      email: '',
+      phone: '',
+      city: ''
+    }
+    let isValid = true
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = 'El nombre es requerido'
+      isValid = false
+    } else if (formData.name.length < 3) {
+      errors.name = 'El nombre debe tener al menos 3 caracteres'
+      isValid = false
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!formData.email.trim()) {
+      errors.email = 'El email es requerido'
+      isValid = false
+    } else if (!emailRegex.test(formData.email)) {
+      errors.email = 'Ingresa un email válido'
+      isValid = false
+    }
+
+    // Phone validation
+    const phoneRegex = /^\+?[\d\s-]{7,}$/
+    if (!formData.phone.trim()) {
+      errors.phone = 'El teléfono es requerido'
+      isValid = false
+    } else if (!phoneRegex.test(formData.phone)) {
+      errors.phone = 'Ingresa un número de teléfono válido (mínimo 7 dígitos)'
+      isValid = false
+    }
+
+    // City validation
+    if (!formData.city.trim()) {
+      errors.city = 'La ciudad es requerida'
+      isValid = false
+    }
+
+    setFormErrors(errors)
+    return isValid
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    if (!validateForm()) {
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -76,10 +135,7 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
           phone: formData.phone
         })
       } catch (e: any) {
-        // If client exists, we might proceed or handle it. 
-        // For this MVP, if createClient fails with "Email already registered", 
-        // we ideally should fetch that client. But we don't have a public endpoint for that.
-        // Let's just show the error for now.
+
         throw e
       }
 
@@ -164,9 +220,13 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
                   <div>
                     <label className="block text-gray-300 text-xs uppercase font-bold mb-2">Cuota Inicial</label>
                     <input
-                      type="number"
-                      value={downPayment}
-                      onChange={(e) => setDownPayment(Number(e.target.value))}
+                      type="text"
+                      value={downPayment > 0 ? `$ ${downPayment.toLocaleString('es-CO')}` : ''}
+                      onChange={(e) => {
+                        const val = Number(e.target.value.replace(/\D/g, ''))
+                        setDownPayment(val)
+                      }}
+                      placeholder="$ 0"
                       className="w-full px-4 py-2 bg-black/60 border border-white/20 rounded-lg text-white text-sm focus:border-roda-green focus:outline-none transition-colors placeholder-gray-500"
                     />
                   </div>
@@ -201,8 +261,9 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
                   placeholder="Ej. Juan Pérez"
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500"
+                  className={`w-full px-4 py-3 bg-white/5 border ${formErrors.name ? 'border-red-500' : 'border-white/10'} rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500`}
                 />
+                {formErrors.name && <p className="text-red-400 text-xs mt-1">{formErrors.name}</p>}
               </div>
               <div>
                 <label className="block text-gray-300 text-xs uppercase font-bold mb-2">Email</label>
@@ -212,8 +273,9 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
                   placeholder="Ej. juan@email.com"
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500"
+                  className={`w-full px-4 py-3 bg-white/5 border ${formErrors.email ? 'border-red-500' : 'border-white/10'} rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500`}
                 />
+                {formErrors.email && <p className="text-red-400 text-xs mt-1">{formErrors.email}</p>}
               </div>
               <div>
                 <label className="block text-gray-300 text-xs uppercase font-bold mb-2">Teléfono</label>
@@ -223,8 +285,9 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
                   placeholder="Ej. +57 300 123 4567"
                   value={formData.phone}
                   onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500"
+                  className={`w-full px-4 py-3 bg-white/5 border ${formErrors.phone ? 'border-red-500' : 'border-white/10'} rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500`}
                 />
+                {formErrors.phone && <p className="text-red-400 text-xs mt-1">{formErrors.phone}</p>}
               </div>
               <div>
                 <label className="block text-gray-300 text-xs uppercase font-bold mb-2">Ciudad</label>
@@ -234,8 +297,9 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
                   placeholder="Ej. Bogotá"
                   value={formData.city}
                   onChange={e => setFormData({ ...formData, city: e.target.value })}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500"
+                  className={`w-full px-4 py-3 bg-white/5 border ${formErrors.city ? 'border-red-500' : 'border-white/10'} rounded-lg text-white focus:outline-none focus:border-roda-green focus:bg-black/60 transition-all placeholder-gray-500`}
                 />
+                {formErrors.city && <p className="text-red-400 text-xs mt-1">{formErrors.city}</p>}
               </div>
             </div>
 
