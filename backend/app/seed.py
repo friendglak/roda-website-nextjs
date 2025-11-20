@@ -2,9 +2,10 @@ from sqlalchemy.orm import Session
 from .database import SessionLocal, engine
 from . import models, schemas, crud
 
+
 def seed_data():
     db = SessionLocal()
-    
+
     # Check if vehicles exist
     vehicles = crud.get_vehicles(db)
     if vehicles:
@@ -12,7 +13,7 @@ def seed_data():
         return
 
     print("Seeding vehicles...")
-    
+
     seed_vehicles = [
         {
             "name": "Roda E-Bike Sport",
@@ -47,8 +48,8 @@ def seed_data():
 
     db.close()
 
+
 if __name__ == "__main__":
     # Ensure tables exist
     models.Base.metadata.create_all(bind=engine)
     seed_data()
-

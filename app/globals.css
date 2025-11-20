@@ -85,6 +85,15 @@ h6 {
   transform: translateY(-1px);
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Loader */
 .loader {
   position: fixed;

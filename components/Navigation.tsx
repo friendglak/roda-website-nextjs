@@ -1,17 +1,19 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 
 import Link from 'next/link'
 
 interface NavigationProps {
-  isMenuOpen: boolean
-  setIsMenuOpen: (open: boolean) => void
-  onOpenModal: () => void
+  isMenuOpen?: boolean
+  setIsMenuOpen?: (open: boolean) => void
+  onOpenModal?: () => void
 }
 
-export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: NavigationProps) {
+export function Navigation({ isMenuOpen = false, setIsMenuOpen = () => { }, onOpenModal = () => { } }: NavigationProps) {
+  const overlayTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
     const menuOverlay = document.getElementById('menu-overlay')
@@ -19,7 +21,8 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
 
     if (menuOverlay) {
       if (!isMenuOpen) {
-        menuOverlay.classList.remove('hidden', 'translate-y-full')
+        if (overlayTimerRef.current) clearTimeout(overlayTimerRef.current)
+        menuOverlay.classList.remove('opacity-0', 'invisible', 'translate-y-full')
         gsap.to(menuLinks, {
           yPercent: -100,
           duration: 0.8,
@@ -33,8 +36,8 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
           yPercent: 0,
           duration: 0.5,
         })
-        setTimeout(() => {
-          menuOverlay.classList.add('hidden')
+        overlayTimerRef.current = setTimeout(() => {
+          menuOverlay.classList.add('opacity-0', 'invisible')
         }, 700)
       }
     }
@@ -69,7 +72,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
       {/* Full Screen Menu Overlay */}
       <div
         id="menu-overlay"
-        className="fixed inset-0 bg-dark-bg/90 backdrop-blur-xl text-light-text z-40 transform translate-y-full transition-transform duration-700 ease-in-out flex flex-col justify-center items-center hidden"
+        className="fixed inset-0 bg-dark-bg/90 backdrop-blur-xl text-light-text z-40 transform translate-y-full transition-all duration-700 ease-in-out flex flex-col justify-center items-center opacity-0 invisible"
       >
         <ul className="space-y-4 text-center">
           <li className="overflow-hidden">

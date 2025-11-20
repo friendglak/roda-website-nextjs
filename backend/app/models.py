@@ -4,10 +4,12 @@ from .database import Base
 import datetime
 import enum
 
+
 class VehicleType(str, enum.Enum):
     EBIKE = "ebike"
     SCOOTER = "scooter"
     MOPED = "moped"
+
 
 class CreditStatus(str, enum.Enum):
     PENDING = "pending"
@@ -15,6 +17,7 @@ class CreditStatus(str, enum.Enum):
     REJECTED = "rejected"
     PAID = "paid"
     DEFAULT = "default"
+
 
 class Client(Base):
     __tablename__ = "clients"
@@ -24,8 +27,9 @@ class Client(Base):
     email = Column(String, unique=True, index=True)
     phone = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    
+
     credits = relationship("CreditApplication", back_populates="client")
+
 
 class Vehicle(Base):
     __tablename__ = "vehicles"
@@ -37,6 +41,7 @@ class Vehicle(Base):
     brand = Column(String)
     image_url = Column(String, nullable=True)
     description = Column(String, nullable=True)
+
 
 class CreditApplication(Base):
     __tablename__ = "credit_applications"
@@ -55,6 +60,7 @@ class CreditApplication(Base):
     vehicle = relationship("Vehicle")
     payments = relationship("Payment", back_populates="credit")
 
+
 class Payment(Base):
     __tablename__ = "payments"
 
@@ -62,5 +68,5 @@ class Payment(Base):
     credit_id = Column(Integer, ForeignKey("credit_applications.id"))
     amount = Column(Float)
     payment_date = Column(DateTime, default=datetime.datetime.utcnow)
-    
+
     credit = relationship("CreditApplication", back_populates="payments")

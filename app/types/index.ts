@@ -1,7 +1,7 @@
 export enum VehicleType {
   EBIKE = "ebike",
   SCOOTER = "scooter",
-  MOPED = "moped"
+  MOPED = "moped",
 }
 
 export interface Vehicle {
@@ -34,7 +34,6 @@ export interface CreditApplication {
   created_at: string;
 }
 
-// New interface with nested details
 export interface CreditApplicationWithDetails extends CreditApplication {
   client?: Client;
   vehicle?: Vehicle;

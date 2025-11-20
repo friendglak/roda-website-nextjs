@@ -25,21 +25,21 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen bg-dark-bg text-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
-        {/* Background effects */}
+      {/* Background effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-roda-green/10 rounded-full blur-[100px] animate-pulse"></div>
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px]"></div>
       </div>
 
       <Navigation />
-      
+
       <div className="z-10 w-full max-w-md p-8">
         <div className="glass-panel p-8 rounded-2xl border border-white/10">
           <h1 className="text-3xl font-black uppercase tracking-tighter mb-2 text-center">
             Admin <span className="text-roda-green">Login</span>
           </h1>
           <p className="text-gray-text text-center mb-8 text-sm">Acceso restringido al personal autorizado.</p>
-          
+
           {error && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-500 p-3 rounded mb-6 text-sm text-center">
               {error}
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 placeholder="admin@roda.com"
               />
             </div>
-            
+
             <div>
               <label className="block text-xs font-mono uppercase tracking-wider text-gray-400 mb-2">Contraseña</label>
               <input
@@ -78,10 +78,10 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 text-center">
-             <p className="text-xs text-gray-600">
-                Demo Credenciales: <br/>
-                User: <span className="text-gray-400">admin@roda.com</span> / Pass: <span className="text-gray-400">admin123</span>
-             </p>
+            <p className="text-xs text-gray-600">
+              Demo Credenciales: <br />
+              User: <span className="text-gray-400">admin@roda.com</span> / Pass: <span className="text-gray-400">admin123</span>
+            </p>
           </div>
         </div>
       </div>

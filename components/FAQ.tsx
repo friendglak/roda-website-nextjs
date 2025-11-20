@@ -10,23 +10,20 @@ export function FAQ() {
   const toggleFAQ = (index: number) => {
     const content = contentRefs.current[index]
     const icon = iconRefs.current[index]
-    
+
     if (!content || !icon) return
 
-    // Check if it's currently open (height is not 0)
     const isOpen = content.style.height && content.style.height !== '0px'
 
-    // Close all others
     contentRefs.current.forEach((el, i) => {
       if (i !== index && el) {
         gsap.to(el, { height: 0, duration: 0.3, ease: 'power2.out' })
         if (iconRefs.current[i]) {
-            gsap.to(iconRefs.current[i], { rotation: 0, duration: 0.3 })
+          gsap.to(iconRefs.current[i], { rotation: 0, duration: 0.3 })
         }
       }
     })
 
-    // Toggle current
     if (isOpen) {
       gsap.to(content, { height: 0, duration: 0.3, ease: 'power2.out' })
       gsap.to(icon, { rotation: 0, duration: 0.3 })
@@ -77,13 +74,13 @@ export function FAQ() {
                 <h3 className="text-xl font-semibold text-light-text">
                   {item.q}
                 </h3>
-                <i 
-                  ref={el => { if(el) iconRefs.current[i] = el }}
-                  className="ph ph-caret-down text-roda-green text-2xl transition-transform flex-shrink-0 ml-4"
+                <i
+                  ref={el => { if (el) iconRefs.current[i] = el }}
+                  className="ph ph-caret-down text-roda-green text-2xl transition-transform shrink-0 ml-4"
                 ></i>
               </button>
-              <div 
-                ref={el => { if(el) contentRefs.current[i] = el }}
+              <div
+                ref={el => { if (el) contentRefs.current[i] = el }}
                 className="faq-answer px-6 text-gray-text overflow-hidden h-0"
               >
                 <div className="pb-6">

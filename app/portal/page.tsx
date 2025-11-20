@@ -49,7 +49,6 @@ export default function PortalPage() {
     setPaymentLoading(creditId)
     try {
       await createPayment(creditId, monthlyPayment)
-      // Reload credits to see updated status
       loadCredits()
       alert('Pago registrado correctamente')
     } catch (err: any) {
@@ -61,10 +60,10 @@ export default function PortalPage() {
 
   return (
     <main className="min-h-screen bg-dark-bg text-white font-sans selection:bg-roda-green selection:text-black">
-      <Navigation 
-        isMenuOpen={isMenuOpen} 
-        setIsMenuOpen={setIsMenuOpen} 
-        onOpenModal={() => router.push('/portal/login')} 
+      <Navigation
+        isMenuOpen={isMenuOpen}
+        setIsMenuOpen={setIsMenuOpen}
+        onOpenModal={() => router.push('/portal/login')}
       />
 
       <div className="pt-32 pb-20 px-4 md:px-8 max-w-7xl mx-auto">

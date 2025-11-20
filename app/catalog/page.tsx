@@ -65,7 +65,7 @@ export default function CatalogPage() {
       <Navigation isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} onOpenModal={() => openModal()} />
 
       <main className="pt-32 pb-20 px-6 max-w-7xl mx-auto">
-        <h1 className="text-4xl md:text-6xl font-black font-mono mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+        <h1 className="text-4xl md:text-6xl font-black font-mono mb-4 text-transparent bg-clip-text bg-linear-to-r from-white to-gray-500">
           CATÁLOGO
         </h1>
         <p className="text-xl text-gray-text mb-12 max-w-2xl">

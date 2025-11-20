@@ -87,6 +87,11 @@ export default function Home() {
       modal.showModal()
       modal.classList.add('active')
       document.body.style.overflow = 'hidden'
+
+      gsap.fromTo('.modal-content',
+        { scale: 0.9, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.3, ease: 'power2.out' }
+      )
     }
   }
 

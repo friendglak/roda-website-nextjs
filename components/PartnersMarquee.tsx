@@ -17,7 +17,6 @@ export function PartnersMarquee() {
     <section className="py-12 bg-dark-bg border-y border-white/10 overflow-hidden">
       <div className="marquee">
         <div className="marquee-content items-center">
-          {/* Triple set for smoother infinite loop on wide screens */}
           {[...partners, ...partners, ...partners].map((partner, i) => (
             <div key={i} className="partner-logo px-8 min-w-[150px] flex justify-center">
               <div className="relative h-12 w-32 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300">

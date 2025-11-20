@@ -115,7 +115,7 @@ export function CreditModal({ onClose, selectedVehicle }: CreditModalProps) {
       className="modal-overlay"
       aria-labelledby="modal-title"
     >
-      <div className="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto bg-[#141414] border border-white/10 shadow-2xl rounded-2xl">
+      <div className="modal-content max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar bg-[#141414] border border-white/10 shadow-2xl rounded-2xl">
         <div className="flex justify-between items-center mb-6">
           <h3 id="modal-title" className="text-2xl font-bold text-white">
             {step === 'form' ? 'Solicita tu crédito' : '¡Solicitud Enviada!'}
