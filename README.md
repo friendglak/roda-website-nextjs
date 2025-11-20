@@ -6,7 +6,7 @@ Este repositorio contiene la solución para la prueba técnica "Mini Roda", una 
 
 La solución sigue una arquitectura de microservicios simplificada, orquestada con Docker Compose:
 
-- **Frontend**: Next.js 15 (React) + Tailwind CSS. Encargado de la UI, Catálogo y Simulador.
+- **Frontend**: Next.js 15 (React) + Tailwind CSS. Encargado de la UI, Catálogo, Simulador y Portal de Clientes.
 - **Backend**: FastAPI (Python). API REST para gestión de clientes, vehículos, créditos y pagos.
 - **Base de Datos**: PostgreSQL 15. Persistencia relacional.
 
@@ -42,7 +42,14 @@ Esto levantará:
 3. **Solicitud de Crédito**:
    - Registro de Cliente (Nombre, Email, Teléfono).
    - Creación de Solicitud de Crédito en Base de Datos.
-4. **API REST Completa**:
+4. **Portal Administrativo**:
+   - Acceso protegido en `/portal/login`.
+   - Dashboard para analistas con listado completo de créditos.
+5. **Portal de Cliente ("Mis Créditos")**:
+   - Consulta pública por correo electrónico en `/consulta`.
+   - Visualización de estado de solicitud y progreso de pagos.
+   - Funcionalidad de "Pagar Cuota" simulada.
+6. **API REST Completa**:
    - `GET /vehicles`: Listar vehículos.
    - `POST /clients`: Crear clientes.
    - `POST /credits`: Crear solicitudes.
@@ -54,6 +61,8 @@ Esto levantará:
 roda-website-nextjs/
 ├── app/                # Frontend Next.js
 │   ├── catalog/        # Página de catálogo
+│   ├── consulta/       # Portal de clientes (Mis Créditos)
+│   ├── portal/         # Portal administrativo
 │   ├── lib/            # Cliente API
 │   └── ...
 ├── backend/            # Backend FastAPI
@@ -71,9 +80,11 @@ roda-website-nextjs/
 
 ## 📝 Notas
 
-- El backend inicializa la base de datos automáticamente al arrancar.
-- Si el catálogo aparece vacío, asegúrate de crear algunos vehículos vía API (POST `/vehicles`) o usar los datos mock de fallback en el frontend.
+- El backend inicializa la base de datos automáticamente al arrancar y ejecuta un seed de datos (vehículos, admin user).
+- Credenciales Admin Demo:
+  - Usuario: `admin@roda.com`
+  - Password: `admin123`
 
 ---
 
-Desarrollado por [Tu Nombre] para Roda.
+Desarrollado por FriendGlak para Roda.
