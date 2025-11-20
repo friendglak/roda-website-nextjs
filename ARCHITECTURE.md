@@ -46,14 +46,14 @@ graph TD
 - **Tecnología**: Next.js 14 (App Router), React, Tailwind CSS, GSAP.
 - **Módulos**:
   - **Público**: Catálogo, Simulador, Landing Page.
-  - **Privado (Portal)**: Dashboard de administración protegido.
+  - **Privado (Portal)**: Dashboard de administración protegido con gestión de pagos.
 - **Comunicación**: Consume `/api/*` a través del Gateway.
 
 ### 2.3 Backend (FastAPI)
 
 - **Tecnología**: Python 3.11, FastAPI, SQLAlchemy, Pydantic.
 - **Seguridad**: Implementación de **OAuth2 con JWT** (JSON Web Tokens) y hashing de contraseñas con **Bcrypt**.
-- **Responsabilidad**: Lógica de negocio, CRUD, Autenticación.
+- **Responsabilidad**: Lógica de negocio, CRUD, Autenticación, Lógica de Pagos.
 - **Caché**: Redis para optimizar lecturas frecuentes.
 
 ### 2.4 Base de Datos (PostgreSQL)
@@ -75,7 +75,7 @@ El sistema implementa un esquema de seguridad basado en roles (simplificado para
 1. **Login**: El admin envía credenciales a `POST /api/token`.
 2. **JWT**: El backend valida y devuelve un `access_token` firmado.
 3. **Almacenamiento**: El frontend guarda el token de forma segura.
-4. **Protección**: Endpoints sensibles (`GET /credits`, `POST /vehicles`) requieren el header `Authorization: Bearer <token>`.
+4. **Protección**: Endpoints sensibles (`GET /credits`, `POST /vehicles`, `POST /payments`) requieren el header `Authorization: Bearer <token>`.
 
 ### 3.2 Flujo de Datos (Optimizado)
 
@@ -87,11 +87,19 @@ El sistema implementa un esquema de seguridad basado en roles (simplificado para
 
 ## 4. Despliegue e Infraestructura
 
+### Desarrollo Local
+
 ```bash
 docker-compose up --build
 ```
 
-Todos los servicios se levantan coordinados con `healthchecks` para asegurar un orden de inicio correcto (DB -> Backend -> Gateway/Frontend).
+### Producción (Kubernetes)
+
+Se incluyen manifiestos en `infra/k8s/` para despliegue en clúster.
+
+### CI/CD
+
+Pipeline configurado en `.github/workflows/ci-cd.yaml` para build y test automático.
 
 ## 5. Decisiones de Diseño
 
@@ -99,3 +107,4 @@ Todos los servicios se levantan coordinados con `healthchecks` para asegurar un 
 - **JWT vs Sesiones**: Se eligió JWT por ser stateless, ideal para escalar el backend horizontalmente sin almacenamiento de sesión centralizado.
 - **Redis**: Se eligió por su simplicidad y performance para estructuras de datos simples como listas JSON.
 - **Frontend Monolítico**: Se mantiene una arquitectura modular dentro de un único repo Next.js para agilidad en el MVP, pero con clara separación de rutas (`/app/catalog` vs `/app/portal`).
+- **Registro de Pagos (Manual)**: Para este MVP, se implementó el registro de pagos a través del Portal Administrativo, simulando un proceso de recaudo manual o conciliación bancaria. En un entorno productivo, esto sería reemplazado por una integración con pasarela de pagos (Wompi/Stripe) accesible directamente por el usuario final.

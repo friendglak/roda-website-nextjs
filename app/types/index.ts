@@ -38,6 +38,8 @@ export interface CreditApplication {
 export interface CreditApplicationWithDetails extends CreditApplication {
   client?: Client;
   vehicle?: Vehicle;
+  total_paid?: number;
+  total_debt?: number;
 }
 
 export interface Payment {

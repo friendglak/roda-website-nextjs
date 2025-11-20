@@ -71,3 +71,20 @@ export async function createClient(data: any) {
     }
     return res.json();
 }
+
+export async function createPayment(creditId: number, amount: number) {
+  const res = await fetch(`${API_URL}/payments/`, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    },
+    body: JSON.stringify({ credit_id: creditId, amount: amount }),
+  });
+  
+  if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.detail || 'Failed to create payment');
+  }
+  return res.json();
+}

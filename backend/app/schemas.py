@@ -61,6 +61,8 @@ class CreditApplication(CreditApplicationBase):
 class CreditApplicationWithDetails(CreditApplication):
     client: Optional[Client] = None
     vehicle: Optional[Vehicle] = None
+    total_paid: float = 0.0
+    total_debt: float = 0.0
 
 # Payment Schemas
 class PaymentBase(BaseModel):

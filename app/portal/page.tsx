@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CreditApplicationWithDetails } from '../types'
-import { fetchAllCredits } from '../lib/api'
+import { fetchAllCredits, createPayment } from '../lib/api'
 import { Navigation } from '@/components/Navigation'
 import { Footer } from '@/components/Footer'
 
@@ -11,16 +11,10 @@ export default function PortalPage() {
   const [credits, setCredits] = useState<CreditApplicationWithDetails[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [paymentLoading, setPaymentLoading] = useState<number | null>(null)
   const router = useRouter()
 
-  useEffect(() => {
-    // Check for token immediately
-    const token = localStorage.getItem('roda_token')
-    if (!token) {
-      router.push('/portal/login')
-      return
-    }
-
+  const loadCredits = () => {
     fetchAllCredits()
       .then(setCredits)
       .catch((err) => {
@@ -32,11 +26,36 @@ export default function PortalPage() {
         }
       })
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('roda_token')
+    if (!token) {
+      router.push('/portal/login')
+      return
+    }
+    loadCredits()
   }, [router])
 
   const handleLogout = () => {
     localStorage.removeItem('roda_token')
     router.push('/portal/login')
+  }
+
+  const handlePayment = async (creditId: number, monthlyPayment: number) => {
+    if (!confirm(`¿Registrar pago de cuota de $${Math.round(monthlyPayment).toLocaleString()}?`)) return
+
+    setPaymentLoading(creditId)
+    try {
+      await createPayment(creditId, monthlyPayment)
+      // Reload credits to see updated status
+      loadCredits()
+      alert('Pago registrado correctamente')
+    } catch (err: any) {
+      alert('Error al registrar pago: ' + err.message)
+    } finally {
+      setPaymentLoading(null)
+    }
   }
 
   return (
@@ -50,7 +69,7 @@ export default function PortalPage() {
               Portal <span className="text-roda-green">Admin</span>
             </h1>
             <p className="text-gray-text text-lg max-w-xl">
-              Gestión de solicitudes de crédito y clientes.
+              Gestión de solicitudes de crédito, clientes y pagos.
             </p>
           </div>
           <div className="flex gap-4 items-center">
@@ -82,11 +101,11 @@ export default function PortalPage() {
                 <thead>
                   <tr className="border-b border-white/10 bg-white/5">
                     <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400">ID</th>
-                    <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400">Fecha</th>
                     <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400">Cliente</th>
                     <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400">Vehículo</th>
-                    <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400">Monto / Plazo</th>
+                    <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400 w-1/4">Progreso de Pagos</th>
                     <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400 text-right">Estado</th>
+                    <th className="p-4 text-xs font-mono uppercase tracking-wider text-gray-400 text-right">Acciones</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -97,28 +116,20 @@ export default function PortalPage() {
                       </td>
                     </tr>
                   ) : (
-                    credits.map((credit) => (
+                    credits.map((credit) => {
+                       const totalDebt = credit.total_debt || (credit.monthly_payment * credit.term_months);
+                       const totalPaid = credit.total_paid || 0;
+                       const progress = Math.min(100, (totalPaid / totalDebt) * 100);
+                       
+                       return (
                       <tr key={credit.id} className="hover:bg-white/5 transition-colors group">
                         <td className="p-4 font-mono text-sm text-gray-500">#{credit.id}</td>
-                        <td className="p-4 text-sm text-gray-300">
-                          {new Date(credit.created_at).toLocaleDateString()}
-                        </td>
                         <td className="p-4">
                           <div className="font-bold text-white">{credit.client?.full_name || 'N/A'}</div>
                           <div className="text-xs text-gray-500">{credit.client?.email}</div>
                         </td>
                         <td className="p-4">
                           <div className="flex items-center gap-3">
-                            {credit.vehicle?.image_url && (
-                              <div className="w-10 h-10 rounded bg-white/10 overflow-hidden relative flex-shrink-0">
-                                <img 
-                                  src={credit.vehicle.image_url} 
-                                  alt={credit.vehicle.name}
-                                  className="object-cover w-full h-full"
-                                  onError={(e) => (e.currentTarget.src = 'https://images.unsplash.com/photo-1571333250630-f0230c320b6d?q=80&w=100&auto=format&fit=crop')}
-                                />
-                              </div>
-                            )}
                             <div>
                               <div className="font-medium text-white">{credit.vehicle?.name || 'Vehículo desconocido'}</div>
                               <div className="text-xs text-gray-500">{credit.vehicle?.brand}</div>
@@ -126,23 +137,43 @@ export default function PortalPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className="font-mono text-roda-green font-bold">
-                            ${credit.amount.toLocaleString()}
-                          </div>
-                          <div className="text-xs text-gray-500">{credit.term_months} meses</div>
+                           <div className="flex justify-between text-xs mb-1">
+                              <span className="text-gray-400">Pagado: ${Math.round(totalPaid).toLocaleString()}</span>
+                              <span className="text-white">${Math.round(totalDebt).toLocaleString()}</span>
+                           </div>
+                           <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                              <div 
+                                className="bg-roda-green h-full transition-all duration-500" 
+                                style={{ width: `${progress}%` }}
+                              ></div>
+                           </div>
+                           <div className="text-xs text-gray-500 mt-1">{Math.round(progress)}% completado</div>
                         </td>
                         <td className="p-4 text-right">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                            ${credit.status === 'approved' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
+                            ${credit.status === 'paid' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' :
+                              credit.status === 'approved' ? 'bg-green-500/10 text-green-500 border border-green-500/20' : 
                               credit.status === 'rejected' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 
                               'bg-yellow-500/10 text-yellow-500 border border-yellow-500/20'}`}>
                             {credit.status === 'pending' ? 'Pendiente' : 
                              credit.status === 'approved' ? 'Aprobado' : 
-                             credit.status === 'rejected' ? 'Rechazado' : credit.status}
+                             credit.status === 'rejected' ? 'Rechazado' : 
+                             credit.status === 'paid' ? 'Pagado' : credit.status}
                           </span>
                         </td>
+                        <td className="p-4 text-right">
+                          {credit.status !== 'paid' && credit.status !== 'rejected' && (
+                            <button
+                              onClick={() => handlePayment(credit.id, credit.monthly_payment)}
+                              disabled={paymentLoading === credit.id}
+                              className="text-xs bg-white/10 hover:bg-roda-green hover:text-black text-white px-3 py-1.5 rounded transition-all cursor-pointer disabled:opacity-50"
+                            >
+                              {paymentLoading === credit.id ? '...' : 'Pagar Cuota'}
+                            </button>
+                          )}
+                        </td>
                       </tr>
-                    ))
+                    )})
                   )}
                 </tbody>
               </table>
@@ -155,4 +186,3 @@ export default function PortalPage() {
     </main>
   )
 }
-
