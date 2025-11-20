@@ -43,6 +43,9 @@ def get_credit(db: Session, credit_id: int):
 def get_credits_by_client(db: Session, client_id: int):
     return db.query(models.CreditApplication).filter(models.CreditApplication.client_id == client_id).all()
 
+def get_all_credits(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.CreditApplication).offset(skip).limit(limit).all()
+
 # Payment CRUD
 def create_payment(db: Session, payment: schemas.PaymentCreate):
     db_payment = models.Payment(**payment.model_dump())

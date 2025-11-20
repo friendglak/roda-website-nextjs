@@ -2,14 +2,14 @@ export function Benefits() {
   return (
     <section id="beneficios" className="py-32 md:py-48 px-6 relative z-10">
       <div className="max-w-[1600px] mx-auto">
-        <div className="mb-20 border-b-2 border-gray-text/20 pb-6">
+        <div className="mb-20 border-b border-white/10 pb-6">
           <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-light-text fade-in-up">
             Beneficios
           </h2>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-          <div className="fade-in-up benefit-card group glass-panel p-8 rounded-2xl">
+          <div className="fade-in-up benefit-card group bg-white/5 border border-white/10 p-8 rounded-2xl">
             <div className="mb-6">
               <i className="ph ph-currency-dollar text-roda-green" style={{ fontSize: '48px' }}></i>
             </div>
@@ -22,7 +22,7 @@ export function Benefits() {
             </p>
           </div>
 
-          <div className="fade-in-up benefit-card group glass-panel p-8 rounded-2xl">
+          <div className="fade-in-up benefit-card group bg-white/5 border border-white/10 p-8 rounded-2xl">
             <div className="mb-6">
               <i className="ph ph-credit-card text-roda-green" style={{ fontSize: '48px' }}></i>
             </div>
@@ -35,7 +35,7 @@ export function Benefits() {
             </p>
           </div>
 
-          <div className="fade-in-up benefit-card group glass-panel p-8 rounded-2xl">
+          <div className="fade-in-up benefit-card group bg-white/5 border border-white/10 p-8 rounded-2xl">
             <div className="mb-6">
               <i className="ph ph-lightning text-roda-green" style={{ fontSize: '48px' }}></i>
             </div>
@@ -48,7 +48,7 @@ export function Benefits() {
             </p>
           </div>
 
-          <div className="fade-in-up benefit-card group glass-panel p-8 rounded-2xl">
+          <div className="fade-in-up benefit-card group bg-white/5 border border-white/10 p-8 rounded-2xl">
             <div className="mb-6">
               <i className="ph ph-shield-check text-roda-green" style={{ fontSize: '48px' }}></i>
             </div>

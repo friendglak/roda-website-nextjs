@@ -15,20 +15,21 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile
-    # No exponemos puerto 3000 al host, solo interno para el gateway
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
     environment:
-      # El frontend ahora habla con el backend a través del gateway (browser side)
-      # Ojo: Si es server-side rendering, "gateway" no resuelve localhost del usuario,
-      # pero para simplificar dev, usamos localhost:80/api o http://gateway/api internamente.
-      # Para el cliente (navegador), la API está en /api
       - NEXT_PUBLIC_API_URL=/api
+      - WATCHPACK_POLLING=true
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
     depends_on:
       - backend
 
   backend:
     build: ./backend
-    # No exponemos puerto 8000 al host, solo interno
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/miniroda
       - REDIS_URL=redis://redis:6379/0
@@ -37,6 +38,12 @@ services:
       - redis
     volumes:
       - ./backend:/app
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   db:
     image: postgres:15-alpine

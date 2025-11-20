@@ -2,7 +2,7 @@ export function HowItWorks() {
   return (
     <section id="secciones" className="py-32 md:py-48 px-6 bg-dark-bg">
       <div className="max-w-[1600px] mx-auto">
-        <div className="mb-20 border-b-2 border-gray-text/20 pb-6">
+        <div className="mb-20 border-b border-white/10 pb-6">
           <h2 className="text-6xl md:text-8xl font-black uppercase tracking-tighter text-light-text fade-in-up">
             Obtén tu crédito<br />en 3 pasos
           </h2>

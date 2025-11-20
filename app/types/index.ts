@@ -34,10 +34,15 @@ export interface CreditApplication {
   created_at: string;
 }
 
+// New interface with nested details
+export interface CreditApplicationWithDetails extends CreditApplication {
+  client?: Client;
+  vehicle?: Vehicle;
+}
+
 export interface Payment {
   id: number;
   credit_id: number;
   amount: number;
   payment_date: string;
 }
-

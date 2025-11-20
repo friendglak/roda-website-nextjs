@@ -57,6 +57,11 @@ class CreditApplication(CreditApplicationBase):
     class Config:
         from_attributes = True
 
+# New Schema for Dashboard with Nested Details
+class CreditApplicationWithDetails(CreditApplication):
+    client: Optional[Client] = None
+    vehicle: Optional[Vehicle] = None
+
 # Payment Schemas
 class PaymentBase(BaseModel):
     credit_id: int

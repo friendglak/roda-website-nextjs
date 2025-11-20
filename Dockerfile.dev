@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Update system dependencies to fix vulnerabilities
+RUN apk update && apk upgrade
+
+# Instalar dependencias
+COPY package.json package-lock.json* ./
+RUN npm install
+COPY . .
+
+# Exponer puerto
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]

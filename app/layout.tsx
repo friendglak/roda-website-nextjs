@@ -26,14 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={`${inter.variable} ${spaceMono.variable}`}>
+    <html lang="es" className={`${inter.variable} ${spaceMono.variable}`} suppressHydrationWarning>
       <head>
         <script src="https://unpkg.com/@phosphor-icons/web"></script>
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased" suppressHydrationWarning>
         {children}
       </body>
     </html>
   );
 }
-

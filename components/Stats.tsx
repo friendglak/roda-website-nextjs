@@ -1,6 +1,6 @@
 export function Stats() {
   return (
-    <section className="py-24 md:py-32 px-6 md:px-12 bg-dark-bg border-y border-gray-text/10">
+    <section className="py-24 md:py-32 px-6 md:px-12 bg-dark-bg border-y border-white/10">
       <div className="max-w-7xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 md:gap-12">
           <div className="fade-in-up text-center">

@@ -72,7 +72,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-text/10 pt-8 text-center text-gray-text text-sm">
-          <p>&copy; 2024 Roda. Todos los derechos reservados.</p>
+          <p>&copy; 2025 Friendglak. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

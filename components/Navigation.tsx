@@ -43,8 +43,8 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
   return (
     <>
       <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-6 pointer-events-none">
-        <nav className="pointer-events-auto glass-panel rounded-full px-6 py-3 md:px-8 md:py-4 flex justify-between items-center w-full max-w-5xl transition-all duration-500">
-          <Link href="/" className="font-mono font-black text-xl md:text-2xl tracking-tighter uppercase text-white hover:text-roda-green transition-colors relative z-50">
+        <nav className="pointer-events-auto glass-panel backdrop-blur-md rounded-full px-6 py-3 md:px-8 md:py-4 flex justify-between items-center w-full max-w-5xl transition-all duration-500">
+          <Link href="/" className="font-mono font-black text-xl md:text-2xl tracking-tighter uppercase text-white hover:text-roda-green transition-colors relative z-50 cursor-pointer">
             RODA
           </Link>
 
@@ -58,7 +58,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
             </button>
             <button
               onClick={onOpenModal}
-              className="hidden cursor-pointermd:block bg-roda-green text-dark-bg px-6 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-[#b8e000] transition-all relative z-50 btn-glow"
+              className="hidden md:block cursor-pointer bg-roda-green text-dark-bg px-6 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-[#b8e000] transition-all relative z-50 btn-glow"
             >
               Portal
             </button>
@@ -69,7 +69,7 @@ export function Navigation({ isMenuOpen, setIsMenuOpen, onOpenModal }: Navigatio
       {/* Full Screen Menu Overlay */}
       <div
         id="menu-overlay"
-        className="fixed inset-0 bg-dark-bg text-light-text z-40 transform translate-y-full transition-transform duration-700 ease-in-out flex flex-col justify-center items-center hidden"
+        className="fixed inset-0 bg-dark-bg/90 backdrop-blur-xl text-light-text z-40 transform translate-y-full transition-transform duration-700 ease-in-out flex flex-col justify-center items-center hidden"
       >
         <ul className="space-y-4 text-center">
           <li className="overflow-hidden">

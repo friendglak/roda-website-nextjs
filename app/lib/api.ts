@@ -1,8 +1,40 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// En Docker/Nginx, la API está en /api relativo al dominio actual.
+// Si no estamos en navegador (SSR), usamos localhost interno si fuera necesario, 
+// pero para cliente siempre /api es lo mejor.
+const API_URL = typeof window !== 'undefined' ? '/api' : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000');
+
+function getAuthHeader() {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('roda_token') : null;
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
+export async function login(username: string, password: string) { // username is email
+  const formData = new URLSearchParams();
+  formData.append('username', username);
+  formData.append('password', password);
+
+  const res = await fetch(`${API_URL}/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: formData,
+  });
+
+  if (!res.ok) throw new Error('Credenciales inválidas');
+  return res.json();
+}
 
 export async function fetchVehicles() {
   const res = await fetch(`${API_URL}/vehicles/`);
   if (!res.ok) throw new Error('Failed to fetch vehicles');
+  return res.json();
+}
+
+export async function fetchAllCredits() {
+  const res = await fetch(`${API_URL}/credits/`, {
+    headers: { ...getAuthHeader() }
+  });
+  if (res.status === 401) throw new Error('Unauthorized');
+  if (!res.ok) throw new Error('Failed to fetch credits');
   return res.json();
 }
 
@@ -39,4 +71,3 @@ export async function createClient(data: any) {
     }
     return res.json();
 }
-
