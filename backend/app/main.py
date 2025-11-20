@@ -189,7 +189,16 @@ def read_all_credits(skip: int = 0, limit: int = 100, db: Session = Depends(get_
     return crud.get_all_credits(db, skip=skip, limit=limit)
 
 
-@app.get("/clients/{client_id}/credits", response_model=List[schemas.CreditApplication], tags=["Credits"])
+@app.get("/portal/credits", response_model=List[schemas.CreditApplicationWithDetails], tags=["Portal"])
+def read_portal_credits(email: str, db: Session = Depends(get_db)):
+    client = crud.get_client_by_email(db, email=email)
+    if not client:
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+
+    return crud.get_credits_by_client(db, client_id=client.id)
+
+
+@app.get("/clients/{client_id}/credits", response_model=List[schemas.CreditApplicationWithDetails], tags=["Credits"])
 def read_client_credits(client_id: int, db: Session = Depends(get_db), current_user: str = Depends(auth.get_current_user)):
     # Protected
     return crud.get_credits_by_client(db, client_id=client_id)
@@ -198,8 +207,7 @@ def read_client_credits(client_id: int, db: Session = Depends(get_db), current_u
 
 
 @app.post("/payments/", response_model=schemas.Payment, tags=["Payments"])
-def create_payment(payment: schemas.PaymentCreate, db: Session = Depends(get_db), current_user: str = Depends(auth.get_current_user)):
-    # Only admin registers payments for now
+def create_payment(payment: schemas.PaymentCreate, db: Session = Depends(get_db)):
     credit = crud.get_credit(db, credit_id=payment.credit_id)
     if not credit:
         raise HTTPException(

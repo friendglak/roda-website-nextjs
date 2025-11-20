@@ -167,13 +167,7 @@ export default function PortalPage() {
                           </td>
                           <td className="p-4 text-right">
                             {credit.status !== 'paid' && credit.status !== 'rejected' && (
-                              <button
-                                onClick={() => handlePayment(credit.id, credit.monthly_payment)}
-                                disabled={paymentLoading === credit.id}
-                                className="text-xs bg-white/10 hover:bg-roda-green hover:text-black text-white px-3 py-1.5 rounded transition-all cursor-pointer disabled:opacity-50"
-                              >
-                                {paymentLoading === credit.id ? '...' : 'Pagar Cuota'}
-                              </button>
+                              <span className="text-xs text-gray-500">Gestión en Portal Cliente</span>
                             )}
                           </td>
                         </tr>

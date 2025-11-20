@@ -84,3 +84,10 @@ export async function createPayment(creditId: number, amount: number) {
   }
   return res.json();
 }
+
+export async function fetchClientCredits(email: string) {
+  const res = await fetch(`${API_URL}/portal/credits?email=${encodeURIComponent(email)}`);
+  if (res.status === 404) throw new Error("Cliente no encontrado con ese email");
+  if (!res.ok) throw new Error("Error al consultar créditos");
+  return res.json();
+}

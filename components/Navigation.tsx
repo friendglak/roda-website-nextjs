@@ -63,8 +63,14 @@ export function Navigation({ isMenuOpen = false, setIsMenuOpen = () => { }, onOp
               onClick={onOpenModal}
               className="hidden md:block cursor-pointer bg-roda-green text-dark-bg px-6 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-[#b8e000] transition-all relative z-50 btn-glow"
             >
-              Portal
+              Solicitar
             </button>
+            <Link
+              href="/consulta"
+              className="hidden md:block cursor-pointer border border-white/20 text-white px-6 py-2 rounded-full font-mono text-xs uppercase font-bold hover:bg-white/10 transition-all relative z-50"
+            >
+              Mis Créditos
+            </Link>
           </div>
         </nav>
       </div>
@@ -85,40 +91,49 @@ export function Navigation({ isMenuOpen = false, setIsMenuOpen = () => { }, onOp
             </Link>
           </li>
           <li className="overflow-hidden">
-            <a
+            <Link
+              href="/consulta"
+              onClick={toggleMenu}
+              className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
+            >
+              Mis Créditos
+            </Link>
+          </li>
+          <li className="overflow-hidden">
+            <Link
               href="/#secciones"
               onClick={toggleMenu}
               className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
             >
               Secciones
-            </a>
+            </Link>
           </li>
           <li className="overflow-hidden">
-            <a
-              href="#beneficios"
+            <Link
+              href="/#beneficios"
               onClick={toggleMenu}
               className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
             >
               Beneficios
-            </a>
+            </Link>
           </li>
           <li className="overflow-hidden">
-            <a
-              href="#testimonios"
+            <Link
+              href="/#testimonios"
               onClick={toggleMenu}
               className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
             >
               Testimonios
-            </a>
+            </Link>
           </li>
           <li className="overflow-hidden">
-            <a
-              href="#faq"
+            <Link
+              href="/#faq"
               onClick={toggleMenu}
               className="menu-link block text-5xl md:text-8xl font-black uppercase tracking-tighter hover:text-roda-green transition-colors transform translate-y-full"
             >
               FAQ
-            </a>
+            </Link>
           </li>
         </ul>
         <div className="mt-12 font-mono text-sm text-gray-text flex gap-8">

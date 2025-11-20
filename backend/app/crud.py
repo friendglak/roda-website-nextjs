@@ -54,7 +54,18 @@ def get_credit(db: Session, credit_id: int):
 
 
 def get_credits_by_client(db: Session, client_id: int):
-    return db.query(models.CreditApplication).filter(models.CreditApplication.client_id == client_id).all()
+    credit_apps = db.query(models.CreditApplication).filter(
+        models.CreditApplication.client_id == client_id).all()
+
+    results = []
+    for credit in credit_apps:
+        total_paid = sum(p.amount for p in credit.payments)
+        total_debt = credit.monthly_payment * credit.term_months
+        credit.total_paid = total_paid
+        credit.total_debt = total_debt
+        results.append(credit)
+
+    return results
 
 
 def get_all_credits(db: Session, skip: int = 0, limit: int = 100):
